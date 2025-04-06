@@ -1,0 +1,130 @@
+<% layout('layouts/main') %>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Admin Dashboard</h2>
+        <form action="/admin/logout" method="POST">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+    
+
+    <!-- Button to trigger modal -->
+    <button type="button" class="btn btn-custom-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+        <i class="fas fa-plus"></i> Add New User
+    </button>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/adduser" method="POST">
+                        <div class="form-group mb-3">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add New User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <h3>Search Users</h3>
+        <div class="input-group mb-4">
+            <input type="text" id="searchUser" class="form-control" placeholder="Search by name or email">
+            <button class="btn btn-outline-primary" onclick="searchUsers()">Search</button>
+        </div>
+    </div>
+
+    <!-- User List -->
+    <div class="table-responsive">
+        <h3>User List</h3>
+        <% if (users && users.length > 0) { %>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTable">
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.name %></td>
+                            <td><%= user.email %></td>
+                            <td class="action-buttons">
+                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateUserModal-<%= user._id %>">
+                                    Update
+                                </button>
+
+                                <!-- Update User Modal -->
+                                <div class="modal fade" id="updateUserModal-<%= user._id %>">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Update User</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/admin/user/<%= user._id %>/update" method="POST">
+                                                    <div class="form-group mb-3">
+                                                        <label>Name</label>
+                                                        <input type="text" class="form-control" name="name" value="<%= user.name %>" required>
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label>Email</label>
+                                                        <input type="email" class="form-control" name="email" value="<%= user.email %>" required>
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label>New Password (optional)</label>
+                                                        <input type="password" class="form-control" name="password">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-warning">Update User</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <form action="/admin/user/<%= user._id %>/delete" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmDelete()">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p class="text-muted">No users found.</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Include Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script src="/js/admin.js"></script>

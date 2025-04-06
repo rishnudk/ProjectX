@@ -1,0 +1,26 @@
+<% layout('layouts/main') %>
+
+<div class="login-container">
+    <h2>Admin Login</h2>
+    <% if (locals.error) { %>
+        <p class="text-center" style="color: red;"><%= error %></p>
+    <% } %>
+
+    <form action="/admin/login" method="POST">
+        <!-- Email Field -->
+        <div class="form-group">
+            <label for="email">Admin Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter admin email" required>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-custom">Login</button>
+        <a href="/" class="atag">User Login</a>
+    </form>
+</div>

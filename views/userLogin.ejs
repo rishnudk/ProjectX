@@ -1,0 +1,31 @@
+<% layout('layouts/main') %>
+
+<div class="login-container">
+  <h2>Login</h2>
+  
+  <!-- Display error message -->
+  <% if (error) { %>
+    <p class="text-center" style="color: red;"><%= error %></p>
+  <% } %>
+
+  <form action="/user/login" method="POST">
+    <!-- Email Field -->
+    <div class="form-group">
+      <label for="email">Enter Your Email</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" minlength="4" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-custom">Login</button>
+
+    <!-- Links -->
+    <a href="/signup" class="atag">Create a new Account</a>
+    <a href="/admin/login" class="atag">Admin login</a>
+  </form>
+</div>
